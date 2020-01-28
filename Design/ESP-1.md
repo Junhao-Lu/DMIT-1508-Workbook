@@ -14,6 +14,8 @@
 
 > TODO: Place imge here
 
+ ### Custormers View ERD <img src="./ESP-2-CustomersView.png">
+
 ## Customer Oredrs View
 
 ### 0NF
