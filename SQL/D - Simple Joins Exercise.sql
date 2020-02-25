@@ -2,6 +2,13 @@
 USE [A01-School]
 GO
 
+-- We express relationships between tables in our design through FOREIGN KEY
+-- constraints. But those constraints simply check/restrict information that
+-- is stored in the FOREIGN KEY column. It doesn't actually/physically "connect"
+-- to pull information from multiple related tables, we have to state the
+-- connection between those tables. That is, we have to state how the tables
+-- JOIN together.
+
 --1.	Select Student full names and the course ID's they are registered in.
 SELECT  FirstName + ' ' + LastName AS 'Full Name',
         CourseId
@@ -93,7 +100,9 @@ WHERE   R.Mark >= 80
 
 --10. Modify the script from the previous question to show the Course Name along with the ID.
 -- TODO: Student Answer Here...
-SELECT  S.FirstName + ' ' + S.LastName AS 'FullName', C.CourseId + ' ' + C.CourseName AS 'Course'
+SELECT  FirstName + ' ' + LastName AS 'FullName',
+        C.CourseId + ' ' + C.CourseName AS 'Course'
 FROM    Student AS S
     INNER JOIN Registration AS R ON S.StudentID = R.StudentID
     INNER JOIN Course AS C       ON R.CourseId = C.CourseId
+WHERE   R.Mark >= 80
