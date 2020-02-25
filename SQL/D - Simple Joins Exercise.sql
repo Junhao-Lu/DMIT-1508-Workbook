@@ -84,7 +84,16 @@ WHERE   S.StudentID = 199912010
 
 --9. What are the Student Names, courseID's with individual Marks at 80% or higher? Sort the results by course.
 -- TODO: Student Answer Here...
+SELECT  FirstName + ' ' + LastName AS 'FullName',
+        CourseName
+FROM    Student S
+    INNER JOIN Registration R ON S.StudentID = R.StudentID
+    INNER JOIN Course C       ON R.CourseId = C.CourseId
+WHERE   R.Mark >= 80
 
 --10. Modify the script from the previous question to show the Course Name along with the ID.
 -- TODO: Student Answer Here...
-
+SELECT  S.FirstName + ' ' + S.LastName AS 'FullName', C.CourseId + ' ' + C.CourseName AS 'Course'
+FROM    Student AS S
+    INNER JOIN Registration AS R ON S.StudentID = R.StudentID
+    INNER JOIN Course AS C       ON R.CourseId = C.CourseId
