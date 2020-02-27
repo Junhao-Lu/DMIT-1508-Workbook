@@ -91,16 +91,21 @@ WHERE   Mark IS NOT NULL
   AND   LEFT(Semester, 4) = 2004
 
 -- 6. select last three characters of all the courses
-
-
+SELECT  RIGHT(CourseName,3)  AS 'last three characters'
+FROM    Registration R
+    INNER JOIN Course C ON C.CourseId = R.CourseId
 -- 7. Select the characters in the position description from characters 8 to 13 for PositionID 5
-
-
+SELECT  SUBSTRING(PositionDescription,8,5) AS 'character 8 to 13'
+FROM    Position
+WHERE   PositionID = 5
 -- 8. Select all the Student First Names as upper case.
-
+SELECT  UPPER(FirstName) AS 'upper case firest name'
+FROM    Student
 
 -- 9. Select the First Names of students whose first names are 3 characters long.
-
+SELECT  FirstName AS '3 characters long'
+FROM    Student
+WHERE   FirstName LIKE '___'
 
 /* ************************************************
     String Functions
