@@ -2,6 +2,10 @@
 USE [A01-School]
 GO
 
+-- A UNION allows us to combine the result set of two or more individual SELECT
+-- statements. For the UNION to work, howerver, the number, order and data type
+-- of the columns in the SELECT statements must match.
+
 --1.	Write a script that will produce the 'It Happened in October' display.
 --The output of the display is shown below
 /*
@@ -60,8 +64,22 @@ AS
         INNER JOIN Position P ON S.PositionID = P.PositionID
 GO
 
+SELECT * FROM RollCall
 
 --2.  Create a list of course IDs and the number of students in the course and
 --    UNION that with a list of the course IDs and the MaxStudents of the course.
 --    The columns should be 'Course', 'Count', and 'Type', with the type for the
 --    first list being 'Actual-' + Semester and the type for the second list being 'Planned'.
+IF OBJECT_ID('CoursePlan') IS NOT NULL
+     DROP VIEW CoursePlan
+GO
+CREATE VIEW CoursePlan
+AS
+   SELECT CourseId, COUNT(StudentID), '' AS 'Type'
+   FROM   Registration
+   GROUP BY  CourseID
+
+   UNION
+   SELECT 'Actual-' + Course
+
+GO
