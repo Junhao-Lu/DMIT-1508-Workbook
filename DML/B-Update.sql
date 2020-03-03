@@ -47,12 +47,19 @@ WHERE  City = 'Edm'
 -- ======= Practice ========
 -- 5. For each student that does not have a mark in the Registration table,
 --    create an update statement that gives each student a different mark.
+-- SELECT floor(rand()*101)AS 'Mark'
 -- TODO: Student Answer Here....
+SELECT * FROM Registration
+UPDATE Registration
+SET    Mark = RAND()*101
+
 
 -- 6. Choose a student from the previous question and withdraw them from all
 --    their courses.
 -- TODO: Student Answer Here....
-
+UPDATE Registration
+SET    CourseId = NULL
+WHERE  StudentID = 199899200
 /* The following statements expect the presence of a view called StudentGrades.
 IF OBJECT_ID('StudentGrades', 'V') IS NOT NULL
     DROP VIEW StudentGrades
@@ -73,7 +80,9 @@ GO
 */
 --6.  Using the StudentGrades view, change the coursename for the capstone course to be 'basket weaving 101'.
 -- TODO: Student Answer Here...
-
+UPDATE StudentGrades
+SET    CourseName = 'basket weaving 101'
+WHERE  CourseName = 'Capstone Project'
 --7.  Using the StudentGrades view, update the  mark for studentID 199899200 in course dmit152 to be 90.
 -- TODO: Student Answer Here...
 

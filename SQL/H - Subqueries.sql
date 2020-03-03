@@ -152,19 +152,22 @@ SELECT StudentID
 FROM Registration
 GROUP BY StudentID
 HAVING AVG(Mark) >= ALL (SELECT AVG(Mark)
-	                         FROM   Registration 
-							 WHERE Mark IS NOT NULL
-                    	     GROUP BY StudentID)
+	                     FROM   Registration 
+						 WHERE Mark IS NOT NULL
+                    	 GROUP BY StudentID)
 
 
 -- 11. Which course(s) allow the largest classes? Show the course id, name, and max class size.
 -- TODO: Student Answer Here...
-SELECT  CourseId, CourseName, MaxStudents
-FROM    Course
-WHERE   CourseId In
-       (SELECT  CourseId, COUNT(StudentID)
-	    FROM    Registration
-		HAVING  
+SELECT * FROM Course
+SELECT  R.CourseId, C.CourseName, C.MaxStudents
+FROM    Course AS C
+    INNER JOIN Registration AS R
+         ON R.CourseId = C.CourseId
+GROUP BY R.CourseId, C.CourseName
+HAVING COUNT(StudentID) >= ALL (SELECT COUNT(StudentID)
+	                            FROM    Registration
+                                GROUP BY CourseId)
         
 
 -- 12. Which course(s) are the most affordable? Show the course name and cost.
@@ -172,6 +175,13 @@ WHERE   CourseId In
 
 -- 13. Which staff have taught the largest classes? (Be sure to group registrations by course and semester.)
 -- TODO: Student Answer Here...
-
+SELECT  FirstName + ' ' + LastName AS 'Staff Name'
+FROM    Staff AS S
+    INNER JOIN Registration AS R
+         ON S.StaffID = R.StaffID
+GROUP BY FirstName + ' ' + LastName, CourseId
+HAVING  COUNT(CourseId) >= ALL (SELECT COUNT(CourseId)
+                                FROM   Registration
+                                GROUP BY StaffID, CourseId)
 -- 14. Which students are most active in the clubs?
 -- TODO: Student Answer Here...

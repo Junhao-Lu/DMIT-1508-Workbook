@@ -16,6 +16,12 @@ GO -- Execute the code up to this point as a single batch
     VALUES ('A', 'Value', 'Per', 'Column'),
            ('Another', 'Row', 'Of', 'Values')
     
+    When inserting values, you can use subqueries for individual values
+    provided that the subquery returns a single value:
+
+    INSERT INTO TableName(Comma, Separated, ListOf, ColumnNames)
+    VALUES ('A', (SELECT SingleValue FROM SomeTable), 'Per', 'Column')
+
     Another syntax for the INSERT statement is to use a SELECT clause in place
     of the VALUES clause. This is used for zero-to-many possible rows to insert.
 
@@ -48,7 +54,10 @@ FROM    Position
 WHERE   PositionID NOT IN (SELECT PositionID FROM Staff)
 --      Add Sheldon Murray as the new Assistant Dean.
 -- TODO: Student Answer Here....
-
+INSERT INTO Staff(FirstName, LastName, DateHired, PositionID)
+SELECT 'Sheldon', 'Murray',GETDATE(),PositionID
+FROM    Position
+WHERE   PositionDescription = 'Assistant Dean'
 -- 3. There are three additional clubs being started at the school:
 --      - START - Small Tech And Research Teams
 --      - CALM - Coping And Lifestyle Management
@@ -63,8 +72,16 @@ VALUES ('START', 'Small Tech And Research Teams'),
 -- 4. In your web browser, use https://randomuser.me/ to get information on three
 --    people to add as new students. Write separate insert statement for each new student.
 -- TODO: Student Answer Here....
-
+INSERT INTO Student(FirstName, LastName, Gender, Birthdate)
+VALUES ('Riat', 'Brown', 'F', 'Nov 1 1934'),
+       ('Sally', 'Cox', 'F', 'May 4 1950'),
+       ('Anthony', 'Foster', 'M', 'Oct 5 1945')
 
 -- 5. Enroll each of the students you've added into the DMIT777 course.
 --    Use 'Dan Gilleland' as the instructor. At this point, their marks should be NULL.
 -- TODO: Student Answer Here....
+SELECT * FROM Student, Registration
+INSERT INTO Student(StudentID, FirstName, LastName, Gender, Birthdate, CourseId)
+VALUES ((SELECT StudentID FROM Student WHERE FirstName = 'Dan' AND LastName = 'Gilleland'), 'Riat', 'Brown', 'F', 'Nov 1 1934', (SELECT CourseId FROM Registration WHERE CourseID = 'DMIT777'),
+       ('Sally', 'Cox', 'F', 'May 4 1950'),
+       ('Anthony', 'Foster', 'M', 'Oct 5 1945')
