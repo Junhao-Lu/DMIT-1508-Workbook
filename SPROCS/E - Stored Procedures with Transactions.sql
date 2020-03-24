@@ -189,7 +189,7 @@ AS
         END
         ELSE
         BEGIN
-            BEGIN TRANSACTION
+            BEGIN TRANSACTION -- Changes will be temporary and can be rolled back
 
             INSERT INTO Registration (StudentID, CourseId, Semester)
             VALUES (@StudentID, @CourseID, @Semester)
@@ -220,6 +220,16 @@ AS
 RETURN
 
 GO
+-- Test RegisterStudent
+-- SELECT * FROM Registration -- 2004J, 'DMIT152'
+-- SELECT * FROM Student
+-- SELECT * FROM Course WHERE CourseID = 'DMIT152'
+EXEC RegisterStudent 199912010, 'DMIT152', '2004J'
+EXEC RegisterStudent 199966250, 'DMIT152', '2004J'
+EXEC RegisterStudent 200011730, 'DMIT152', '2004J'
+EXEC RegisterStudent 200122100, 'DMIT152', '2004J'
+
+EXEC RegisterStudent 200312345, 'DMIT152', '2004J'
 
 -- 4. Add a stored procedure called WitnessProtection that erases all existence of a student from the database. The stored procedure takes the StudentID, first and last names, gender, and birthdate as parameters. Ensure that the student exists in the database before removing them (all the parameter values must match).
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = N'PROCEDURE' AND ROUTINE_NAME = 'WitnessProtection')
@@ -352,7 +362,7 @@ CREATE PROCEDURE WithdrawStudent
     @Semester   char(5)
 AS
     -- Declare a bunch of local/temp variables
-    DECLARE @coursecost     decimal (6,2)
+    DECLARE @coursecost     decimal (6,2) -- basically equivalent to the money date type
     DECLARE @amount         decimal(6,2)
     DECLARE @balanceowing   decimal(6,2)
     DECLARE @difference     decimal(6,2)
@@ -427,7 +437,7 @@ GO
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'ArchiveGrade')
     DROP TABLE ArchiveGrade
 
-CREATE TABLE ArchiveGrade
+CREATE TABLE ArchiveGrade -- Fairly simply - no PKs, no FKs, no CHECK
 (
     StudentID        int,
     CourseId        char (7),
